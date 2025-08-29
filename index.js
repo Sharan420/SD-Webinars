@@ -168,14 +168,14 @@ app.post("/rzp-webhook", async (req, res) => {
 <p>Soham</p>`;
 
     // Send email with DOCX attachment
-    sendMail(email, invoiceSubject, invoiceText, [
-      {
-        filename: "invoice.docx",
-        content: docxBuffer,
-        contentType:
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      },
-    ]);
+    // sendMail(email, invoiceSubject, invoiceText, [
+    //   {
+    //     filename: "invoice.docx",
+    //     content: docxBuffer,
+    //     contentType:
+    //       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    //   },
+    // ]);
 
     // Clean up temporary files
     fs.unlinkSync("invoice.docx");
