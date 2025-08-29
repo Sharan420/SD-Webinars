@@ -7,6 +7,8 @@ import cors from "cors";
 import { google } from "googleapis";
 import dotenv from "dotenv";
 
+dotenv.config();
+
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = "http://localhost:3000/oauth2callback";
