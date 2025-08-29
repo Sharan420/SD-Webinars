@@ -7,12 +7,11 @@ import cors from "cors";
 import { google } from "googleapis";
 import dotenv from "dotenv";
 
-dotenv.config();
-
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = "http://localhost:3000/oauth2callback";
 const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
+const PORT = process.env.PORT || 3000;
 
 const oAuth2Client = new google.auth.OAuth2(
   CLIENT_ID,
@@ -103,6 +102,6 @@ app.post("/send-mail", async (req, res) => {
   }
 });
 
-app.listen(process.env.PORT || 3000, "localhost", () => {
-  console.log("Server is running on port 3000");
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
