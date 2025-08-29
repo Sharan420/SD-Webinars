@@ -92,6 +92,17 @@ app.post("/rzp-webhook", async (req, res) => {
     const amount = req.body.payload.payment.entity.amount / 100;
     const payment_id = req.body.payload.payment.entity.id;
 
+    console.log(
+      "Received Payment: ",
+      name,
+      email,
+      phone,
+      "ORDER ID: ",
+      req.body.payload.payment.entity.id,
+      "AMOUNT: ",
+      req.body.payload.payment.entity.amount / 100
+    );
+
     const welcomeSubject = "You're in, excited to have you for the webinar!";
     const welcomeText = `<p>Hi ${name},</p>
 
