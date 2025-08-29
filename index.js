@@ -22,7 +22,7 @@ const oAuth2Client = new google.auth.OAuth2(
 );
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
-async function sendMail(subject, text, attachments) {
+async function sendMail(email, subject, text, attachments) {
   try {
     const accessToken = await oAuth2Client.getAccessToken();
 
@@ -40,7 +40,7 @@ async function sendMail(subject, text, attachments) {
 
     const mailOptions = {
       from: "Admin TFS",
-      to: "sharansuri1980@gmail.com",
+      to: email,
       subject: subject,
       text: text,
       attachments: attachments,
@@ -63,6 +63,11 @@ app.get("/", (req, res) => {
 
 app.post("/rzp-webhook", async (req, res) => {
   console.log(req.body);
+  console.log(req.body.payload);
+  console.log(req.body.payload.payment);
+  console.log(req.body.payload.payment.entity);
+  console.log(req.body.payload.payment.entity.notes);
+  console.log(JSON.stringify(req.body));
   res.status(200).send("Webhook received");
 });
 
@@ -70,6 +75,32 @@ app.post("/send-mail", async (req, res) => {
   try {
     const { name, email, amount, date, payment_id } = req.body;
 
+    const welcomeSubject = "You're in, excited to have you for the webinar!";
+    const welcomeText = `Hi ${name},
+
+Thank you so much for registering for my upcoming webinar “The Pathway to Coaching at the Elite Level”. In this session, we'll explore how to navigate your journey as a coach right from working at the grassroots to breaking into elite, high-performance sport.
+
+I'm super thrilled and looking forward to sharing my journey with you. More importantly, I'll walk you through the roadmap I wish I had when I was starting out: the skills to focus on, how to find mentors, and how to build a sustainable career as an elite coach.
+
+⏰ Time: 11 AM - 1 PM
+📅 Date: 14th September 2025, Sunday
+📍 Location: Online Webinar (further details will be shared)
+
+Here's what to expect next:
+
+Your spot is secured and your calendar is blocked.
+A confirmation and invoice will be sent your way shortly.
+24 hours before the session, you'll receive your private access link.
+
+When the day arrives, just click the link, show up with an open mind, and I promise you'll walk away with clarity and direction for your coaching journey.
+
+This is not just another session. I'm truly grateful you chose to invest your time and trust in me. I don't take it lightly. My only goal is that, when we finish, you feel this was one of the best decisions you've made for your growth.
+
+See you there!
+
+Soham`;
+
+    sendMail(email, welcomeSubject, welcomeText, []);
     // Read and process the template
     const content = fs.readFileSync("invoiceTemplate.docx", "binary");
     const zip = new PizZip(content);
@@ -85,8 +116,26 @@ app.post("/send-mail", async (req, res) => {
     // Read the generated DOCX file
     const docxBuffer = fs.readFileSync("invoice.docx");
 
+    const invoiceSubject =
+      "Your Registration is Confirmed: The Pathway to Coaching at the Elite Level";
+    const invoiceText = `Hi ${name},
+Thank you for registering for my upcoming webinar - The Pathway to Coaching at the Elite Level.
+
+✅ Your payment has been received successfully.
+📄 Please find your invoice attached for your records.
+
+Event Details:
+⏰ Time: 11 AM - 1 PM
+📅 Date: 14th September 2025, Sunday
+📍 Location: Online Webinar (further details will be shared)
+
+I can't wait to see you there and share the lessons I've learned the hard way, so you don't have to.
+See you there!
+
+Soham`;
+
     // Send email with DOCX attachment
-    sendMail("Invoice", "Invoice", [
+    sendMail(email, invoiceSubject, invoiceText, [
       {
         filename: "invoice.docx",
         content: docxBuffer,
