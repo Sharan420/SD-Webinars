@@ -42,7 +42,7 @@ async function sendMail(email, subject, text, attachments) {
       from: "Admin TFS",
       to: email,
       subject: subject,
-      text: text,
+      html: text,
       attachments: attachments,
     };
 
@@ -61,7 +61,7 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.post("/rzp-webhook", async (req, res) => {
+app.post("/test-hook", async (req, res) => {
   console.log(req.body);
   console.log(req.body?.payload);
   console.log(req.body?.payload?.payment);
@@ -71,34 +71,51 @@ app.post("/rzp-webhook", async (req, res) => {
   res.status(200).send("Webhook received");
 });
 
-app.post("/send-mail", async (req, res) => {
+app.post("/rzp-webhook", async (req, res) => {
   try {
-    const { name, email, amount, date, payment_id } = req.body;
+    if (
+      !req.body.payload.payment.entity.notes.email ||
+      !req.body.payload.payment.entity.notes.name ||
+      !req.body.payload.payment.entity.notes.phone
+    ) {
+      res.status(400).send("PII not found");
+      return;
+    }
+
+    const { name, email, phone } = req.body.payload.payment.entity.notes;
+
+    const date = new Date().toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+    const amount = req.body.payload.payment.entity.amount / 100;
+    const payment_id = req.body.payload.payment.entity.id;
 
     const welcomeSubject = "You're in, excited to have you for the webinar!";
-    const welcomeText = `Hi ${name},
+    const welcomeText = `<p>Hi ${name},</p>
 
-Thank you so much for registering for my upcoming webinar “The Pathway to Coaching at the Elite Level”. In this session, we'll explore how to navigate your journey as a coach right from working at the grassroots to breaking into elite, high-performance sport.
+<p>Thank you so much for registering for my upcoming webinar “<b>The Pathway to Coaching at the Elite Level</b>”. In this session, we'll explore how to navigate your journey as a coach right from working at the grassroots to breaking into elite, high-performance sport.</p>
 
-I'm super thrilled and looking forward to sharing my journey with you. More importantly, I'll walk you through the roadmap I wish I had when I was starting out: the skills to focus on, how to find mentors, and how to build a sustainable career as an elite coach.
+<p>I'm super thrilled and looking forward to sharing my journey with you. More importantly, I'll walk you through the roadmap I wish I had when I was starting out: the skills to focus on, how to find mentors, and how to build a sustainable career as an elite coach.</p>
 
-⏰ Time: 11 AM - 1 PM
-📅 Date: 14th September 2025, Sunday
-📍 Location: Online Webinar (further details will be shared)
+<p>⏰ Time: 11 AM - 1 PM</p>
+<p>📅 Date: 14th September 2025, Sunday</p>
+<p>📍 Location: Online Webinar (further details will be shared)</p>
 
-Here's what to expect next:
+<p>Here's what to expect next:</p>
+<ul>
+<li>Your spot is secured and your calendar is blocked.</li>
+<li>A confirmation and invoice will be sent your way shortly.</li>
+<li>24 hours before the session, you'll receive your private access link.</li>
+</ul>
+<p>When the day arrives, just click the link, show up with an open mind, and I promise you'll walk away with clarity and direction for your coaching journey.</p>
 
-Your spot is secured and your calendar is blocked.
-A confirmation and invoice will be sent your way shortly.
-24 hours before the session, you'll receive your private access link.
+<p>This is not just another session. I'm truly grateful you chose to invest your time and trust in me. I don't take it lightly. My only goal is that, when we finish, you feel this was one of the best decisions you've made for your growth.</p>
 
-When the day arrives, just click the link, show up with an open mind, and I promise you'll walk away with clarity and direction for your coaching journey.
+<p>See you there!</p>
 
-This is not just another session. I'm truly grateful you chose to invest your time and trust in me. I don't take it lightly. My only goal is that, when we finish, you feel this was one of the best decisions you've made for your growth.
-
-See you there!
-
-Soham`;
+<p>Soham</p>`;
 
     sendMail(email, welcomeSubject, welcomeText, []);
     // Read and process the template
@@ -118,21 +135,21 @@ Soham`;
 
     const invoiceSubject =
       "Your Registration is Confirmed: The Pathway to Coaching at the Elite Level";
-    const invoiceText = `Hi ${name},
-Thank you for registering for my upcoming webinar - The Pathway to Coaching at the Elite Level.
+    const invoiceText = `<p>Hi ${name},</p>
+<p>Thank you for registering for my upcoming webinar - <b>The Pathway to Coaching at the Elite Level</b>.</p>
 
-✅ Your payment has been received successfully.
-📄 Please find your invoice attached for your records.
+<p>✅ <b>Your payment has been received successfully.</b></p>
+<p>📄 Please find your invoice attached for your records.</p>
 
-Event Details:
-⏰ Time: 11 AM - 1 PM
-📅 Date: 14th September 2025, Sunday
-📍 Location: Online Webinar (further details will be shared)
+<p><b>Event Details:</b></p>
+<p>⏰ Time: 11 AM - 1 PM</p>
+<p>📅 Date: 14th September 2025, Sunday</p>
+<p>📍 Location: Online Webinar (further details will be shared)</p>
 
-I can't wait to see you there and share the lessons I've learned the hard way, so you don't have to.
-See you there!
+<p>I can't wait to see you there and share the lessons I've learned the hard way, so you don't have to.</p>
+<p>See you there!</p>
 
-Soham`;
+<p>Soham</p>`;
 
     // Send email with DOCX attachment
     sendMail(email, invoiceSubject, invoiceText, [
