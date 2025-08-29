@@ -75,14 +75,19 @@ app.post("/rzp-webhook", async (req, res) => {
   try {
     if (
       !req.body.payload.payment.entity.notes.email ||
-      !req.body.payload.payment.entity.notes.name ||
+      !req.body.payload.payment.entity.notes.full_name ||
       !req.body.payload.payment.entity.notes.phone
     ) {
+      console.log("PII not found");
       res.status(400).send("PII not found");
       return;
     }
 
-    const { name, email, phone } = req.body.payload.payment.entity.notes;
+    const {
+      full_name: name,
+      email,
+      phone,
+    } = req.body.payload.payment.entity.notes;
 
     const date = new Date().toLocaleDateString("en-US", {
       day: "numeric",
