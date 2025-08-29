@@ -63,10 +63,10 @@ app.get("/", (req, res) => {
 
 app.post("/rzp-webhook", async (req, res) => {
   console.log(req.body);
-  console.log(req.body.payload);
-  console.log(req.body.payload.payment);
-  console.log(req.body.payload.payment.entity);
-  console.log(req.body.payload.payment.entity.notes);
+  console.log(req.body?.payload);
+  console.log(req.body?.payload?.payment);
+  console.log(req.body?.payload?.payment?.entity);
+  console.log(req.body?.payload?.payment?.entity?.notes);
   console.log(JSON.stringify(req.body));
   res.status(200).send("Webhook received");
 });
