@@ -188,7 +188,8 @@ app.post("/rzp-webhook", async (req, res) => {
 Thank you so much for registering for my upcoming webinar “<b>The Pathway to Coaching at the Elite Level</b>”. In this session, we'll explore how to navigate your journey as a coach right from working at the grassroots to breaking into elite, high-performance sport.</p>
 
 <p><br>
-I'm super thrilled and looking forward to sharing my journey with you. More importantly, I'll walk you through the roadmap I wish I had when I was starting out: the skills to focus on, how to find mentors, and how to build a sustainable career as an elite coach.</p>
+
+I'm super thrilled and looking forward to sharing my journey with you. More importantly, I'll walk you through the roadmap I wish I had when I was starting out: the skills to focus on, how to find mentors, and how to build a sustainable career as an elite coach. The session will also have a dedicated Q&A session where I will answer questions and clear doubts if any.</p>
 
 <p><br>
 <img data-emoji="⏰" class="an1" alt="⏰" aria-label="⏰" draggable="false" src="https://fonts.gstatic.com/s/e/notoemoji/16.0/23f0/72.png" loading="lazy" style="height: 1.2em; width: 1.2em; vertical-align: middle;"> <b>Time:</b> 11 AM - 1 PM<br>
