@@ -186,7 +186,7 @@ Soham</p>
 
 </span>`;
 
-    await sendMail(email, welcomeSubject, welcometestv2, []);
+    sendMail(email, welcomeSubject, welcometestv2, []);
 
     const calendarSubject = "Your Calendar Invite for the Webinar!";
     const calendarLink =
@@ -224,7 +224,7 @@ Soham</p>
   </p>
 
 </span>`;
-    await sendMail(email, calendarSubject, calendarText, []);
+    sendMail(email, calendarSubject, calendarText, []);
     // Clean up temporary files
     res.status(200).send("Email sent successfully");
   } catch (error) {
