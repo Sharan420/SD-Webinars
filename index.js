@@ -75,6 +75,53 @@ app.post("/test-hook", async (req, res) => {
   }
 });
 
+app.post("/send-email", async (req, res) => {
+  try {
+    const name = "Sharan";
+    const calendarSubject = "Your Calendar Invite for the Webinar!";
+    const calendarLink =
+      "https://calendar.google.com/calendar/render?action=TEMPLATE&text=The+Pathway+to+Coaching+at+the+Elite+Level&dates=20250914T053000Z/20250914T073000Z&details=Link+will+be+shared+24hours+prior+to+the+webinar";
+    const calendarText = `<span class="im" style="color: rgb(0, 0, 0); font-family: Arial, Helvetica, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
+
+  <p>Hello ${name},</p>
+
+  <p><br>
+    I'm super excited to have you join the webinar on <b>The Pathway to Coaching at the Elite Level</b> on 
+    <b>14th September 2025</b>, and am sharing the calendar invite for the same.
+  </p>
+
+  <p><br>
+    Please note the Zoom link with private access to join the session will be shared <b>24 hours prior</b> 
+    to the session on your email.
+  </p>
+
+  <p style="text-align: center; margin: 30px 0;"><br>
+    <a href="${calendarLink}"
+       style="background-color:rgb(11, 76, 175); color: #ffffff; text-decoration: none; padding: 12px 24px; 
+              border-radius: 6px; font-weight: bold; display: inline-block;">
+      📅 Add to Calendar
+    </a>
+  </p>
+
+  <p style="text-align: center; font-size: small;"><br>
+    If you're unable to add it to your calendar, please find the link below:
+    <a href="${calendarLink}">${calendarLink}</a>
+  </p>
+
+  <p><br>
+    See you soon,<br/>
+    Soham
+  </p>
+
+</span>`;
+    sendMail("surabhisolanki03@gmail.com", calendarSubject, calendarText, []);
+    res.status(200).send("Email sent successfully");
+  } catch (error) {
+    console.error("Error sending email:", error);
+    res.status(500).send("Error sending email");
+  }
+});
+
 app.post("/rzp-webhook", async (req, res) => {
   try {
     if (
@@ -135,29 +182,6 @@ app.post("/rzp-webhook", async (req, res) => {
     }
 
     const welcomeSubject = "You're in, excited to have you for the webinar!";
-    const welcomeText = `<p>Hi ${name},</p>
-<br/>
-<p>Thank you so much for registering for my upcoming webinar “<b>The Pathway to Coaching at the Elite Level</b>”. In this session, we'll explore how to navigate your journey as a coach right from working at the grassroots to breaking into elite, high-performance sport.</p>
-<p>I'm super thrilled and looking forward to sharing my journey with you. More importantly, I'll walk you through the roadmap I wish I had when I was starting out: the skills to focus on, how to find mentors, and how to build a sustainable career as an elite coach.</p>
-<br/>
-<p>⏰ <b>Time:</b> 11 AM - 1 PM</p>
-<p>📅 <b>Date:</b> 14th September 2025, Sunday</p>
-<p>📍 <b>Location:</b> Online Webinar (further details will be shared)</p>
-<br/>
-<p>Here's what to expect next:</p>
-<ul>
-<li>Your spot is <b>secured and a calendar invite</b> has been shared.</li>
-<li>A <b>payment confirmation and receipt</b> will be sent in your inbox.</li>
-<li><b>24 hours before</b> the session, you'll receive your <b>private access link</b>.</li>
-<li>Keep an <b>eye on your inbox</b> for further communications and surprises!</li>
-</ul>
-<br/>
-<p>When the day arrives, just click the link, show up with an open mind, and I promise you'll walk away with clarity and direction for your coaching journey.</p>
-<br/>
-<p>This is not just another session. I'm truly grateful you chose to invest your time and trust in me. I don't take it lightly. My only goal is that, when we finish, you feel this was one of the best decisions you've made for your growth.</p>
-<br/>
-<p>See you there!</p>
-<p>Soham</p>`;
     const welcometestv2 = `<span class="im" style="color: rgb(0, 0, 0); font-family: Arial, Helvetica, sans-serif; font-size: small; background-color: rgb(255, 255, 255);"><p>Hi ${name},</p>
 
 <p><br>
@@ -197,21 +221,21 @@ Soham</p>
     const calendarSubject = "Your Calendar Invite for the Webinar!";
     const calendarLink =
       "https://calendar.google.com/calendar/render?action=TEMPLATE&text=The+Pathway+to+Coaching+at+the+Elite+Level&dates=20250914T053000Z/20250914T073000Z&details=Link+will+be+shared+24hours+prior+to+the+webinar";
-    const calendarText = `<span style="color: rgb(0,0,0); font-family: Arial, Helvetica, sans-serif; font-size: small; background-color: rgb(255,255,255); line-height: 1.6;">
+    const calendarText = `<span class="im" style="color: rgb(0, 0, 0); font-family: Arial, Helvetica, sans-serif; font-size: small; background-color: rgb(255, 255, 255);">
 
   <p>Hello ${name},</p>
 
-  <p>
+  <p><br>
     I'm super excited to have you join the webinar on <b>The Pathway to Coaching at the Elite Level</b> on 
     <b>14th September 2025</b>, and am sharing the calendar invite for the same.
   </p>
 
-  <p>
+  <p><br>
     Please note the Zoom link with private access to join the session will be shared <b>24 hours prior</b> 
     to the session on your email.
   </p>
 
-  <p style="text-align: center; margin: 30px 0;">
+  <p style="text-align: center; margin: 30px 0;"><br>
     <a href="${calendarLink}"
        style="background-color:rgb(11, 76, 175); color: #ffffff; text-decoration: none; padding: 12px 24px; 
               border-radius: 6px; font-weight: bold; display: inline-block;">
@@ -219,12 +243,12 @@ Soham</p>
     </a>
   </p>
 
-  <p style="text-align: center; font-size: small;">
+  <p style="text-align: center; font-size: small;"><br>
     If you're unable to add it to your calendar, please find the link below:
     <a href="${calendarLink}">${calendarLink}</a>
   </p>
 
-  <p>
+  <p><br>
     See you soon,<br/>
     Soham
   </p>
