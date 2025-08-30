@@ -93,13 +93,15 @@ app.post("/rzp-webhook", async (req, res) => {
       phone,
     } = req.body.payload.payment.entity.notes;
 
-    const date = new Date().toLocaleDateString("en-US", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
     const amount = req.body.payload.payment.entity.amount / 100;
     const payment_id = req.body.payload.payment.entity.id;
+
+    const checkPaymentCaptured = await PaymentCaptured.findOne({ payment_id });
+    if (checkPaymentCaptured) {
+      console.log("Payment already captured");
+      res.status(200).send("Payment already captured");
+      return;
+    }
 
     console.log(
       "Received Payment: ",
@@ -114,13 +116,17 @@ app.post("/rzp-webhook", async (req, res) => {
 
     const payload = JSON.stringify(req.body.payload);
     try {
+      // Get current time and date in IST (Indian Standard Time)
+      const documentDate = new Date(
+        new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+      );
       const paymentCaptured = new PaymentCaptured({
         email,
         full_name: name,
         phone,
         amount,
         payment_id,
-        date,
+        date: documentDate,
         payload,
       });
       await paymentCaptured.save();
