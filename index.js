@@ -63,6 +63,11 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
+app.get("/transaction-count", async (req, res) => {
+  const transactionCount = await PaymentCaptured.countDocuments();
+  res.status(200).send({ transactionCount });
+});
+
 app.post("/test-hook", async (req, res) => {
   try {
     const { email, full_name, phone } = req.body.payload.payment.entity.notes;
