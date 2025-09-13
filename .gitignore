@@ -1,3 +1,6 @@
 .env
 node_modules
 start.js
+sohamTransactions.csv
+credentials.json
+test.py
